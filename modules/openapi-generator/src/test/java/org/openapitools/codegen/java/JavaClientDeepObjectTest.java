@@ -30,34 +30,4 @@ import java.nio.file.Paths;
 import static org.openapitools.codegen.TestUtils.assertFileContains;
 
 public class JavaClientDeepObjectTest {
-
-    @Test
-    public void deepObject() throws IOException {
-        File output = Files.createTempDirectory("test").toFile().getCanonicalFile();
-        output.deleteOnExit();
-        String outputPath = output.getAbsolutePath().replace('\\', '/');
-
-        OpenAPI openAPI = new OpenAPIParser()
-                .readLocation("src/test/resources/3_0/deepobject.yaml", null, new ParseOptions()).getOpenAPI();
-
-        JavaClientCodegen codegen = new JavaClientCodegen();
-        codegen.setLibrary("native");
-        codegen.setOutputDir(output.getAbsolutePath());
-
-        ClientOptInput input = new ClientOptInput();
-        input.openAPI(openAPI);
-        input.config(codegen);
-
-        DefaultGenerator generator = new DefaultGenerator();
-
-        generator.setGeneratorPropertyDefault(CodegenConstants.MODELS, "true");
-        generator.setGeneratorPropertyDefault(CodegenConstants.MODEL_TESTS, "false");
-        generator.setGeneratorPropertyDefault(CodegenConstants.MODEL_DOCS, "false");
-        generator.setGeneratorPropertyDefault(CodegenConstants.APIS, "true");
-        generator.setGeneratorPropertyDefault(CodegenConstants.SUPPORTING_FILES, "false");
-        generator.opts(input).generate();
-
-        assertFileContains(Paths.get(outputPath + "/src/main/java/org/openapitools/client/api/DefaultApi.java"),
-                "options[a]", "options[b]");
-    }
 }

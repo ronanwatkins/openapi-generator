@@ -1294,7 +1294,7 @@ public class JavaModelTest {
         final CodegenConfigurator configurator = new CodegenConfigurator()
                 .setGeneratorName("java")
                 .setLibrary("jersey2")
-                //.addAdditionalProperty("withXml", true)
+                .addAdditionalProperty("withXml", true)
                 .addAdditionalProperty(CodegenConstants.SERIALIZABLE_MODEL, true)
                 .setInputSpec(inputSpec)
                 .setOutputDir(output.getAbsolutePath());
@@ -1303,30 +1303,6 @@ public class JavaModelTest {
         new DefaultGenerator().opts(clientOptInput).generate();
 
         File orderFile = new File(output, "src/main/java/org/openapitools/client/model/Order.java");
-        Assert.assertTrue(orderFile.exists());
-    }
-
-    @Test
-    public void generateEmpty() throws Exception {
-        String inputSpec = "src/test/resources/3_0/ping.yaml";
-
-        final File output = Files.createTempDirectory("test").toFile();
-        output.deleteOnExit();
-        Assert.assertTrue(new File(inputSpec).exists());
-
-        JavaClientCodegen config = new org.openapitools.codegen.languages.JavaClientCodegen();
-        config.setJava8Mode(true);
-        config.setHideGenerationTimestamp(true);
-        config.setOutputDir(output.getAbsolutePath());
-
-        final OpenAPI openAPI = TestUtils.parseFlattenSpec(inputSpec);
-
-        final ClientOptInput opts = new ClientOptInput();
-        opts.config(config);
-        opts.openAPI(openAPI);
-        new DefaultGenerator().opts(opts).generate();
-
-        File orderFile = new File(output, "src/main/java/org/openapitools/client/api/DefaultApi.java");
         Assert.assertTrue(orderFile.exists());
     }
 }

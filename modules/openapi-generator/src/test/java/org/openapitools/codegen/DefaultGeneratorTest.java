@@ -33,7 +33,6 @@ public class DefaultGeneratorTest {
         File output = target.toFile();
         try {
             List<String> ignoreFile = Arrays.asList(
-                    ".travis.yml",
                     "build.sbt",
                     "src/main/AndroidManifest.xml",
                     "pom.xml",
@@ -64,7 +63,7 @@ public class DefaultGeneratorTest {
 
             List<File> files = generator.opts(clientOptInput).generate();
 
-            Assert.assertEquals(files.size(), 42);
+            Assert.assertEquals(files.size(), 24);
 
             // Check expected generated files
             // api sanity check
@@ -81,13 +80,6 @@ public class DefaultGeneratorTest {
             // supporting files sanity check
             TestUtils.ensureContainsFile(files, output, "build.gradle");
             Assert.assertTrue(new File(output, "build.gradle").exists());
-
-            TestUtils.ensureContainsFile(files, output, "api/openapi.yaml");
-            Assert.assertTrue(new File(output, "build.gradle").exists());
-
-            // Check excluded files
-            TestUtils.ensureDoesNotContainsFile(files, output, ".travis.yml");
-            Assert.assertFalse(new File(output, ".travis.yml").exists());
 
             TestUtils.ensureDoesNotContainsFile(files, output, "build.sbt");
             Assert.assertFalse(new File(output, "build.sbt").exists());
@@ -149,7 +141,7 @@ public class DefaultGeneratorTest {
 
             List<File> files = generator.opts(clientOptInput).generate();
 
-            Assert.assertEquals(files.size(), 16);
+            Assert.assertEquals(files.size(), 11);
 
             // Check API is written and Test is not
             TestUtils.ensureContainsFile(files, output, "src/main/java/org/openapitools/client/api/PetApi.java");
@@ -259,7 +251,6 @@ public class DefaultGeneratorTest {
 
             List<String> filesToGenerate = Arrays.asList(
                     "pom.xml",
-                    ".travis.yml",
                     ".gitignore",
                     "git_push.sh"
             );
@@ -267,10 +258,9 @@ public class DefaultGeneratorTest {
 
             List<File> files = generator.opts(clientOptInput).generate();
 
-            Assert.assertEquals(files.size(), 5);
+            Assert.assertEquals(files.size(), 4);
 
             TestUtils.ensureContainsFile(files, output, "pom.xml");
-            TestUtils.ensureContainsFile(files, output, ".travis.yml");
             TestUtils.ensureContainsFile(files, output, ".gitignore");
             TestUtils.ensureContainsFile(files, output, "git_push.sh");
             TestUtils.ensureContainsFile(files, output, ".openapi-generator/VERSION");
@@ -698,11 +688,6 @@ public class DefaultGeneratorTest {
             generator.setGeneratorPropertyDefault(CodegenConstants.API_TESTS, "false");
 
             List<File> files = generator.opts(clientOptInput).generate();
-
-            // remove commented code based on review - files does not seem to be supported in CodegenConfigurator
-            // supporting files sanity check
-            // TestUtils.ensureContainsFile(files, output, "sampleConfig.json");
-            // Assert.assertTrue(new File(output, "sampleConfig.json").exists());
 
             // Generator should report api_client.py as a generated file
             TestUtils.ensureContainsFile(files, output, "io/something/api_client.py");
